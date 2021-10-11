@@ -8,6 +8,7 @@ import {
   Patch,
   Post,
 } from '@nestjs/common';
+import { CreateUserDto, ReadUserDto, UpdateUserDto } from '../dtos';
 import { UserService } from '../services';
 
 @Controller({
@@ -18,22 +19,25 @@ export class UserController {
   constructor(private readonly userService: UserService) {}
 
   @Get()
-  public getUser() {
+  public getUser(): Promise<ReadUserDto[]> {
     return this.userService.findAll();
   }
 
   @Get(':id')
-  public getUsers(@Param('id', ParseIntPipe) id: number) {
+  public getUsers(@Param('id', ParseIntPipe) id: number): Promise<ReadUserDto> {
     return this.userService.findOne(id);
   }
 
   @Post()
-  public createUser(dto: any) {
+  public createUser(@Body() dto: CreateUserDto): Promise<ReadUserDto> {
     return this.userService.create(dto);
   }
 
   @Patch(':id')
-  public updateUser(@Param('id', ParseIntPipe) id: number, @Body() dto: any) {
+  public updateUser(
+    @Param('id', ParseIntPipe) id: number,
+    @Body() dto: UpdateUserDto,
+  ): Promise<ReadUserDto> {
     return this.userService.update(id, dto);
   }
 
